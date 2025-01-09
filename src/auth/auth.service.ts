@@ -4,8 +4,8 @@ import { UsersService } from '../users/users.service';
 import { RedisService } from '../redis/redis.service';
 import * as bcrypt from 'bcryptjs';
 import { User } from '@prisma/client';
-import { CreateUserDto } from 'src/users/dto/user.dto';
 import { ConfigService } from '@nestjs/config';
+import { SignInDto } from './dto/sign-in.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +16,7 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async validateUser({ email, password }: CreateUserDto): Promise<any> {
+  async validateUser({ email, password }: SignInDto): Promise<any> {
     const user = await this.usersService.findOne(email);
     if (user && (await bcrypt.compare(password, user.password))) {
       return { id: user.id, email: user.email };
