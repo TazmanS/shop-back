@@ -1,9 +1,16 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
 import { CreateUserDto } from '../users/dto/user.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { INVALID_CREDENTAILS } from 'src/consts/errors';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -24,7 +31,7 @@ export class AuthController {
   async login(@Body() signInDto: SignInDto) {
     const user = await this.authService.validateUser(signInDto);
     if (!user) {
-      throw new Error('Invalid credentials, v1');
+      throw new HttpException(INVALID_CREDENTAILS, HttpStatus.BAD_REQUEST);
     }
     return this.authService.login(user);
   }

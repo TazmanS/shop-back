@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString, Length } from 'class-validator';
-import { NOT_EMAIL, PASSWORD_LENGTH } from 'src/conts/errors';
+import { NOT_EMAIL, PASSWORD_LENGTH } from 'src/consts/errors';
 
 export class CreateUserDto {
   @ApiProperty({ example: 'test@gmail.com', description: 'User email' })
