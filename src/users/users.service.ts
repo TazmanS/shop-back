@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
+import { CreateUserDto, GetAllUsersDto, UpdateUserDto } from './dto/user.dto';
 import { User } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 import * as bcrypt from 'bcryptjs';
+import { getPaginationParams } from 'src/pagination';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async getAll() {
-    return await this.prisma.user.findMany();
+  async getAll(getAllUsersDto: GetAllUsersDto) {
+    const { skip, take } = getPaginationParams(getAllUsersDto);
+    return await this.prisma.user.findMany({ skip, take });
   }
 
   async createUser({ email, password }: CreateUserDto): Promise<User> {

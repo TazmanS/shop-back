@@ -9,9 +9,10 @@ import {
   HttpStatus,
   Patch,
   Param,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
+import { CreateUserDto, GetAllUsersDto, UpdateUserDto } from './dto/user.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { UNAUTHORIZED, WRONG_PARAMS } from 'src/consts/errors';
@@ -23,8 +24,8 @@ export class UsersController {
 
   @Get('all')
   @ApiOperation({ summary: 'Get all users' })
-  getAll() {
-    return this.usersService.getAll();
+  getAll(@Query() getAllUsersDto: GetAllUsersDto) {
+    return this.usersService.getAll(getAllUsersDto);
   }
 
   @Post()
