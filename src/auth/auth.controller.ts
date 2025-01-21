@@ -33,6 +33,6 @@ export class AuthController {
     if (!user) {
       throw new HttpException(INVALID_CREDENTAILS, HttpStatus.BAD_REQUEST);
     }
-    return this.authService.login(user);
+    return await this.authService.login(user);
   }
 }

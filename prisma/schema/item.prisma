@@ -1,0 +1,11 @@
+model Item {
+  id          Int     @id @default(autoincrement())
+  Company     Company @relation(fields: [companyId], references: [id])
+  companyId   Int
+  name        String
+  description String
+  price       Int
+  image       String?
+  Order       Order?  @relation(fields: [orderId], references: [id])
+  orderId     Int?
+}

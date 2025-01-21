@@ -1,11 +1,11 @@
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { RedisService } from './redis.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
+import { JwtGuard } from 'src/auth/guard/jwt.guard';
 
 @Controller('redis')
 @ApiTags('Redis')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(JwtGuard)
 export class RedisController {
   constructor(private readonly redisService: RedisService) {}
 

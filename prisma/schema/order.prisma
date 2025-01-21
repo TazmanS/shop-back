@@ -1,0 +1,7 @@
+model Order {
+  id        Int    @id @default(autoincrement())
+  userId    Int
+  fullPrice Int
+  address   String
+  items     Item[]
+}

@@ -14,8 +14,8 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto, GetAllUsersDto, UpdateUserDto } from './dto/user.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
 import { UNAUTHORIZED, WRONG_PARAMS } from 'src/consts/errors';
+import { JwtGuard } from 'src/auth/guard/jwt.guard';
 
 @Controller('users')
 @ApiTags('Users')
@@ -35,7 +35,7 @@ export class UsersController {
   }
 
   @Get('me')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtGuard)
   @ApiOperation({ summary: 'Get current user' })
   getMe(@Request() req) {
     const user = req.user;
@@ -46,7 +46,7 @@ export class UsersController {
   }
 
   @Patch('/:id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtGuard)
   @ApiOperation({ summary: 'Update user' })
   update(
     @Param('id') id: string,

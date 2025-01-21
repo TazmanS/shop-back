@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-jwt';
-import { RedisService } from '../../redis/redis.service';
 import { ConfigService } from '@nestjs/config';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    private redisService: RedisService,
     private configService: ConfigService,
+    private prisma: PrismaService,
   ) {
     super({
       jwtFromRequest: (req) => req.cookies['access_token'],
@@ -18,10 +18,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    const user = await this.redisService.getValue(payload.sub.toString());
+    const user = await this.prisma.user.findUnique({
+      where: { id: payload.sub },
+    });
     if (!user) {
       return null;
     }
-    return JSON.parse(user);
+
+    return user;
   }
 }

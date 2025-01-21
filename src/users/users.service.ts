@@ -9,28 +9,32 @@ import { getPaginationParams } from 'src/pagination';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async getAll(getAllUsersDto: GetAllUsersDto) {
+  async getAll(getAllUsersDto: GetAllUsersDto): Promise<User[]> {
     const { skip, take } = getPaginationParams(getAllUsersDto);
     return await this.prisma.user.findMany({ skip, take });
   }
 
-  async createUser({ email, password }: CreateUserDto): Promise<User> {
-    const hashedPassword = await bcrypt.hash(password, 10);
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
+    const { email, login, name } = createUserDto;
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     return await this.prisma.user.create({
       data: {
         email,
+        login,
+        name,
+        role: 'USER',
         password: hashedPassword,
       },
     });
   }
 
-  async findOne(email: string) {
+  async findOne(email: string): Promise<User> {
     return await this.prisma.user.findUnique({
       where: { email },
     });
   }
 
-  async update(userId: string, updateUserDto: UpdateUserDto) {
+  async update(userId: string, updateUserDto: UpdateUserDto): Promise<User> {
     return await this.prisma.user.update({
       where: { id: +userId },
       data: updateUserDto,
